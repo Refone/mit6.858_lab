@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIFF="
-1239c1239
+1286c1286
 <         self.path_info = to_unicode(path_info)
 ---
 >         self.path_info = to_unicode(path_info or u'')
