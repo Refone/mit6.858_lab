@@ -9,6 +9,7 @@
 #include <grp.h>
 #include <fcntl.h>
 #include <netdb.h>
+#include <errno.h>
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
@@ -165,9 +166,34 @@ pid_t launch_svc(CONF *conf, const char *name)
             warnx("extra gid %d", gids[i]);
     }
 
+    //lab 2 - exercise 2:
     if ((dir = NCONF_get_string(conf, name, "dir")))
     {
         /* chroot into dir */
+        struct stat sbuf;
+        if (stat(dir, &sbuf)<0) {
+            if (errno==ENOENT) {
+                if (mkdir(dir, 0755)<0){
+                    errx(1,"Failed to create %s - %s\n", dir, strerror(errno));
+                }
+                warnx("Created dir: %s\n", dir);
+            } else {
+                errx(1,"Failed to stat %s - %s\n", dir, strerror(errno));
+            }
+            warnx("Access dir: %s\n", dir);
+        } else if (!S_ISDIR(sbuf.st_mode)) {
+            errx(1,"Error - %s is not a directory!\n", dir);
+        }
+
+        if (chdir(dir)<0) {
+            //change the current working directory of the calling process to dir.
+            errx(1,"Failed to change directory %s - %s\n", dir ,strerror(errno));
+        }
+
+        if (chroot(dir)<0) {
+            //change the root directory of the calling process to dir.
+            errx(1,"Failed to chroot to %s - %s\n", dir, strerror(errno));
+        }
     }
 
     signal(SIGCHLD, SIG_DFL);
