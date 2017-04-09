@@ -75,3 +75,15 @@ set_perms 0:61012 770 /jail/zoobar/db/person
 set_perms 0:61012 770 /jail/zoobar/db/transfer
 set_perms 0:61012 660 /jail/zoobar/db/person/person.db
 set_perms 0:61012 660 /jail/zoobar/db/transfer/transfer.db
+
+chown -R 0:61013 /jail/zoobar/media
+chown -R 0:61013 /jail/zoobar/templates
+chmod -R 660 /jail/zoobar/media/*
+chmod -R 660 /jail/zoobar/templates/*
+
+chown 0:61012 /jail/zoobar/*.py
+chown 0:61012 /jail/zoobar/*.pyc
+chown 61012:61012 /jail/zoobar/*.cgi
+chmod 774 /jail/zoobar/*.py
+chmod 774 /jail/zoobar/*.pyc
+chmod 774 /jail/zoobar/*.cgi
