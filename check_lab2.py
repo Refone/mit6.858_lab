@@ -77,6 +77,7 @@ def killall():
     scripts = "echo-server.py auth-server.py bank-server.py profile-server.py".split(" ")
     for script in scripts:
         sh("pkill -f 'python2 .*%s' >/dev/null 2>&1" % script, exit_onerr=False)
+        #sh("pkill -f 'python .*%s' >/dev/null 2>&1" % script, exit_onerr=False)
 
 def setup():
     log("+ setting up environment in fresh /jail..")
@@ -228,6 +229,7 @@ def check_db(ex, service, dbfile, table, columns):
 
     dbname = os.path.basename(dbfile)
     uid = file_uid(dbfile)
+    log(red("FUCK"), ex, "uid: %s " % uid)
     sh("pgrep -a -u %s > /tmp/ex-db.log" % uid, exit_onerr=False)
     x = file_read("/tmp/ex-db.log")
     if service not in x:
